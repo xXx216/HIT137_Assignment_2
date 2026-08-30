@@ -1,14 +1,50 @@
+import os 
 
+def transform_char (char, shift1, shift2):
+    # Checking if character is lower, upper letter, or a number.
+    if "a" <= char <= "z":
+        if "a" <= char <= "n":
+            position = ord (char) - ord ('a')
+            encrypted_position = (position + shift1 * shift2) % 26
+            encrypted_char = chr (encrypted_position + ord ('a'))
+        else: # o - z
+            position = ord (char) - ord ('a')
+            encrypted_position = (position - (shift1 + shift2)) % 26
+            encrypted_char = chr (encrypted_position + ord ('a'))
 
-
-
-
-
-
-def encrypt_file (shift1. shift2, input_path: str, output_path: str) -> None:
-    with open (input_path, "r", encoding='utf-8') as input_file:
-        content = input_file.read()
+    elif "A" <= char <= "Z":
+        if "A" <= char <= "M":
+            position = ord (char) - ord ('A')
+            encrypted_position = (position - shift1) % 26
+            encrypted_char = chr (encrypted_position + ord ('A'))
+        else: # N - Z
+            position = ord (char) - ord ('A')
+            encrypted_position = (position + shift2 * shift2) % 26
+            encrypted_char = chr (encrypted_position + ord ('A'))
     
+    elif "0" <= char <= "9":
+        position = ord (char) - ord ('0')
+        encrypted_position = (position + (shift1 - shift2)) % 10
+        encrypted_char = chr (encrypted_position + ord ('0'))
+    
+    else: # char is Spaces, tabs, newlines, punctuation, symbols, so unchanged.
+        encrypted_char = char
+    
+    return encrypted_char
+
+
+def encrypt_file (shift1, shift2, input_path: str, output_path: str) -> None:
+    with open (input_path, "r") as input_file:
+        content = input_file.read()
+
+    encrypted_characters = ""
+    for char in content:
+        transformed = transform_char (char, shift1, shift2)
+        encrypted_characters += transformed
+
+    with open (output_path, "w") as output_file:
+        output_file.write (encrypted_characters)
+
 
 
 
@@ -22,9 +58,10 @@ def main():
     else:
         encrypt_file (shift1_input, shift2_input, "raw_text.txt", "encrypted_text.txt")
 
-        decrypt_file (shift1_input, shift2_input, "encrypted_text.txt", "decrypted_text.txt")
+        
+        #decrypt_file (shift1_input, shift2_input, "encrypted_text.txt", "decrypted_text.txt")
 
-        verify_files (i dont know man)
+        #verify_files (i dont know man)
     
 if __name__ == "__main__":
-    main()
+    main() 
