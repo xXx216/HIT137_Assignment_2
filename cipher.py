@@ -6,34 +6,34 @@ def transform_char (char, shift1, shift2, decrypt = False):
         if "a" <= char <= "n":
             position = ord (char) - ord ('a')
             if decrypt == False: # Encrypt
-                encrypted_position = (position + shift1 * shift2) % 26
+                encrypted_position = (position + shift1 * shift2) % 14
             else: # Decrypt (flip + to -)
-                encrypted_position = (position - shift1 * shift2) % 26         
+                encrypted_position = (position - shift1 * shift2) % 14       
             encrypted_char = chr (encrypted_position + ord ('a'))
         
         else: # o - z
-            position = ord (char) - ord ('a')
+            position = ord (char) - ord ('o')
             if decrypt == False: # Encrypt
-                encrypted_position = (position - (shift1 + shift2)) % 26
+                encrypted_position = (position - (shift1 + shift2)) % 12
             else: # Decrypt (flip + to -)
-                encrypted_position = (position + (shift1 + shift2)) % 26
-            encrypted_char = chr (encrypted_position + ord ('a'))
+                encrypted_position = (position + (shift1 + shift2)) % 12
+            encrypted_char = chr (encrypted_position + ord ('o'))
 
     elif "A" <= char <= "Z":
         if "A" <= char <= "M":
             position = ord (char) - ord ('A')
             if decrypt == False: # Encrypt
-                encrypted_position = (position - shift1) % 26
+                encrypted_position = (position - shift1) % 13
             else: 
-                encrypted_position = (position + shift1) % 26
+                encrypted_position = (position + shift1) % 13
             encrypted_char = chr (encrypted_position + ord ('A'))
         else: # N - Z
-            position = ord (char) - ord ('A')
+            position = ord (char) - ord ('N')
             if decrypt == False: # Encrypt
-                encrypted_position = (position + shift2 * shift2) % 26
+                encrypted_position = (position + shift2 * shift2) % 13
             else:
-                encrypted_position = (position - shift2 * shift2) % 26
-            encrypted_char = chr (encrypted_position + ord ('A'))
+                encrypted_position = (position - shift2 * shift2) % 13
+            encrypted_char = chr (encrypted_position + ord ('N'))
     
     elif "0" <= char <= "9":
         position = ord (char) - ord ('0')
