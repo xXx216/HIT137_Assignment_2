@@ -76,7 +76,16 @@ def decrypt_file (shift1: int, shift2: int, input_path: str, output_path: str) -
 
 
 #-------
-
+def verify_files (file1_path: str, file2_path: str):
+    with open (file1_path, "r") as file1:
+        content1 = file1.read()
+    with open (file2_path, "r") as file2:
+        content2 = file2.read()
+    if content1 == content2:
+        print ("Verification successful: The files are identical.")
+    else:
+        print ("Verification failed: The files are different.")
+        
 
 def main():
     shift1_input = int(input("Enter a non-negative integer for shift1: "))
@@ -92,7 +101,7 @@ def main():
         decrypt_file (shift1_input, shift2_input, "encrypted_text.txt", "decrypted_text.txt")
         print ("Decryption complete")
 
-        #verify_files (i dont know man)
+        verify_files ("raw_text.txt", "decrypted_text.txt")
     
 if __name__ == "__main__":
     main() 
