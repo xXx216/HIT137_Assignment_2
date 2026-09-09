@@ -4,8 +4,6 @@ numbers = ["2", "+", "3", "*", "(", "4", "+", "1", ")", "END"]
 
 position = 0
 
-#everytime a def parse takes a value, position is increased by 1.'
-
 def peek():
     return numbers[position]
 
@@ -67,31 +65,48 @@ def parse_level5_primary():
     
     raise Exception (f"Error!")
 
-
+def tokenise(line):
+    tokens = []
+    pos = 0
     
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    while pos < len(line):
+        c = line[pos]
+        if c.isspace():
+            pos += 1
+            continue
+        if c.isdigit():
+            token = c
+            pos += 1
+            while pos < len(line) and line[pos].isdigit():
+                    token += line[pos]
+                    pos += 1
+            tokens.append(token)
+            continue
+        if c in "+-*/%^()":
+            token = c
+            pos += 1
+            tokens.append(token)
+            continue
+        else:
+            raise Exception (f"Error!")
+    tokens.append("END")
+    return tokens
+    
 
 
 
 def evaluate_file (input_path: str):
     with open (input_path, "r") as f:
         content = f.read()
-    for line in content:
-        # something something
+    lines = content.splitlines()
+    for line in lines:
+        if not line.strip():
+            continue
+        numbers = tokenise(line)
+        #xxxx
+
+
+           
         result = parse_level1_add_sub()
         if peek() != "END":
             raise Exception(f"error!")
