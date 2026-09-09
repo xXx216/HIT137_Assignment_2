@@ -20,12 +20,13 @@ def parse_level1_add_sub(): # 3 position left - middle - right/ start from lv 1 
     if peek() == "+" or "-":
         middle = take()
         right = parse_level2_mul_div()
+        left = f"{middle}, {left}, {right}"
     else:
         return left
 
 def parse_level2_mul_div(): # 3 position left - middle - right 
     left = parse_level3_unary()
-    if peek() = "*" or "/" or "%":
+    if peek() == "*" or "/" or "%":
         middle = take()
         right = parse_level3_unary()
     else:
@@ -54,6 +55,9 @@ def parse_level5_primary(): # takes in brackets and numbers
     if peek() == "(":
         take() # left = "("
         middle = parse_level1_add_sub() # second layer start with lv1 inside first layer
+    if peek() == ")":
+        take ()
+        return left
 
 
     
