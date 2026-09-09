@@ -1,73 +1,62 @@
 
-# this is just an example: 2 + 3 * (4 + 1)
-numbers = ["2", "+", "3", "*", "(", "4", "+", "1", ")"] 
+# this is just an example: 2 + 3 * (4 + 1) (token)
+numbers = ["2", "+", "3", "*", "(", "4", "+", "1", ")", "END"] 
 
 position = 0
 
 #everytime a def parse takes a value, position is increased by 1.'
 
+def peek():
+    return numbers[position]
 
+def take() 
+    global position
+    value = numbers[position]
+    position += 1 #everytime a parse level accepts a character, position is moved.
+    return value
 
 def parse_level1_add_sub(): # 3 position left - middle - right/ start from lv 1 - 5, then return from 5 back to 1
     left = parse_level2_mul_div()
-    if numbers[position] == "+" or "-":
-        middle = numbers[position] 
-        numbers[position] += 1
-        right =
-    if numbers[position] == "+" or "-":
-        ###
+    if peek() == "+" or "-":
+        middle = take()
+        right = parse_level2_mul_div()
     else:
-        
-    
-    else:
-        #error.
+        return left
 
 def parse_level2_mul_div(): # 3 position left - middle - right 
-    
-    if numbers[position] == "*" or "/" or "%":
-        #xxxx
+    left = parse_level3_unary()
+    if peek() = "*" or "/" or "%":
+        middle = take()
+        right = parse_level3_unary()
     else:
-        left = parse_level3_power()
-    
-    if numbers[position] == "*" or "/" or "%":
+        return left
+
+
+def parse_level3_unary(): # 3 position: middle - right
+    if peek() = "-":
+        middle =....
+    else:
+        return parse_level4_power()
+
+
+def parse_level4_power(): # 3 position left - middle - right 
+    left = parse_level5_primary()
+    if peek() = "^":
         #xxx
     else:
         return left
 
 
-
-def parse_level3_unary(): # 3 position: middle - right
-    if numbers[position] == "-":
-        ####
-    else:
-        return parse_level4_primary()
-
-
-def parse_level4_power(): # 3 position left - middle - right 
-    
-    if numbers[position] == "^":
-        ###
-    else:
-        left = parse_level5_unary()
-    
-    if numbers[position] == "^":
-        ###
-    else:
-        return left
-
-
-
 def parse_level5_primary(): # takes in brackets and numbers
-    value = numbers[position]
-    if value.isdigit():
-        position += 1 
+    if peek().isdigit():
+        value = take()
         return value
+    if peek() == "(":
+        take() # left = "("
+        middle = parse_level1_add_sub() # second layer start with lv1 inside first layer
+
+
     
-    if value == "()"
-        # something 
-    
-    else:
-        #error
 
 
 
@@ -92,6 +81,8 @@ def evaluate_file (input_path: str):
     for line in content:
         # something something
         result = parse_level1_add_sub()
+        if left != "END":
+            raise Exception(f"error!")
 
 
 
