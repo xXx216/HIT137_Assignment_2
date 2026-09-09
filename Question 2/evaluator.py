@@ -10,17 +10,50 @@ position = 0
 
 def parse_level1_add_sub(): # 3 position left - middle - right/ start from lv 1 - 5, then return from 5 back to 1
     left = parse_level2_mul_div()
-def parse_level2_mul_div(): # 3 position left - middle - right 
-    left = parse_level3_power()
-def parse_level3_power(): # 3 position left - middle - right 
-    left = parse_level4_unary()
-    if numbers[position] == "^":
+    if numbers[position] == "+" or "-":
+        middle = numbers[position] 
+        numbers[position] += 1
+        right =
+    if numbers[position] == "+" or "-":
         ###
-def parse_level4_unary(): # 3 position: middle - right
+    else:
+        
+    
+    else:
+        #error.
+
+def parse_level2_mul_div(): # 3 position left - middle - right 
+    
+    if numbers[position] == "*" or "/" or "%":
+        #xxxx
+    else:
+        left = parse_level3_power()
+    
+    if numbers[position] == "*" or "/" or "%":
+        #xxx
+    else:
+        return left
+
+
+
+def parse_level3_unary(): # 3 position: middle - right
     if numbers[position] == "-":
         ####
     else:
-        return parse_level5_primary()
+        return parse_level4_primary()
+
+
+def parse_level4_power(): # 3 position left - middle - right 
+    
+    if numbers[position] == "^":
+        ###
+    else:
+        left = parse_level5_unary()
+    
+    if numbers[position] == "^":
+        ###
+    else:
+        return left
 
 
 
@@ -32,6 +65,9 @@ def parse_level5_primary(): # takes in brackets and numbers
     
     if value == "()"
         # something 
+    
+    else:
+        #error
 
 
 
