@@ -35,7 +35,10 @@ def parse_level2_mul_div(): # 3 position left - middle - right
 
 def parse_level3_unary(): # 3 position: middle - right
     if peek() == "-":
-        middle =....
+        middle = take()
+        right = parse_level4_power()
+        left = f"(neg {right})"
+        return left
     else:
         return parse_level4_power()
 
@@ -43,7 +46,10 @@ def parse_level3_unary(): # 3 position: middle - right
 def parse_level4_power(): # 3 position left - middle - right 
     left = parse_level5_primary()
     if peek() == "^":
-        #xxx
+        middle = take()
+        right = parse_level5_primary()
+        left = f"({middle}, {left}, {right})"
+        return left
     else:
         return left
 
