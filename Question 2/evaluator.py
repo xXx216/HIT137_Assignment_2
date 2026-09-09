@@ -16,18 +16,18 @@ def take():
     return value
 
 def parse_level1_add_sub(): # 3 position left - middle - right/ start from lv 1 - 5, then return from 5 back to 1
-    left = parse_level2_mul_div() #2 / #4
+    left = parse_level2_mul_div() 
     if peek() == "+" or peek() =="-":
-        middle = take() #+ / #+
+        middle = take() 
         right = parse_level2_mul_div()
         left = f"({middle}, {left}, {right})"
 
     return left
 
 def parse_level2_mul_div(): # 3 position left - middle - right 
-    left = parse_level3_unary() #3
+    left = parse_level3_unary() 
     if peek() == "*" or peek() =="/" or peek() =="%":
-        middle = take() #*
+        middle = take() 
         right = parse_level3_unary()
         left = f"({middle}, {left}, {right})"
     return left
