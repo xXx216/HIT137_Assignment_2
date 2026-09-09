@@ -9,7 +9,7 @@ position = 0
 def peek():
     return numbers[position]
 
-def take() 
+def take(): 
     global position
     value = numbers[position]
     position += 1 #everytime a parse level accepts a character, position is moved.
@@ -17,24 +17,24 @@ def take()
 
 def parse_level1_add_sub(): # 3 position left - middle - right/ start from lv 1 - 5, then return from 5 back to 1
     left = parse_level2_mul_div() #2 / #4
-    if peek() == "+" or "-":
-        middle = take() # + / #+
+    if peek() == "+" or peek() =="-":
+        middle = take() #+ / #+
         right = parse_level2_mul_div()
-        left = f"{middle}, {left}, {right}"
+        left = f"({middle}, {left}, {right})"
 
     return left
 
 def parse_level2_mul_div(): # 3 position left - middle - right 
     left = parse_level3_unary() #3
-    if peek() == "*" or "/" or "%":
+    if peek() == "*" or peek() =="/" or peek() =="%":
         middle = take() #*
         right = parse_level3_unary()
-    else:
-        return left
+        left = f"({middle}, {left}, {right})"
+    return left
 
 
 def parse_level3_unary(): # 3 position: middle - right
-    if peek() = "-":
+    if peek() == "-":
         middle =....
     else:
         return parse_level4_power()
@@ -42,7 +42,7 @@ def parse_level3_unary(): # 3 position: middle - right
 
 def parse_level4_power(): # 3 position left - middle - right 
     left = parse_level5_primary()
-    if peek() = "^":
+    if peek() == "^":
         #xxx
     else:
         return left
@@ -57,7 +57,9 @@ def parse_level5_primary(): # takes in brackets and numbers
         middle = parse_level1_add_sub() # second layer start with lv1 inside first layer\
         if peek() == ")":
             take ()
-            return left
+            return middle
+    
+    raise Exception (f"Error!")
 
 
     
@@ -85,7 +87,7 @@ def evaluate_file (input_path: str):
     for line in content:
         # something something
         result = parse_level1_add_sub()
-        if left != "END":
+        if peek() != "END":
             raise Exception(f"error!")
 
 
