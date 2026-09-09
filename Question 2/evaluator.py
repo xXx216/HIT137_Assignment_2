@@ -12,55 +12,55 @@ def peek():
 def take(): 
     global position
     value = numbers[position]
-    position += 1 #everytime a parse level accepts a character, position is moved.
+    position += 1 
     return value
 
-def parse_level1_add_sub(): # 3 position left - middle - right/ start from lv 1 - 5, then return from 5 back to 1
+def parse_level1_add_sub(): 
     left = parse_level2_mul_div() 
-    if peek() == "+" or peek() =="-":
+    while peek() == "+" or peek() =="-":
         middle = take() 
         right = parse_level2_mul_div()
         left = f"({middle}, {left}, {right})"
 
     return left
 
-def parse_level2_mul_div(): # 3 position left - middle - right 
+def parse_level2_mul_div(): 
     left = parse_level3_unary() 
-    if peek() == "*" or peek() =="/" or peek() =="%":
+    while peek() == "*" or peek() =="/" or peek() =="%":
         middle = take() 
         right = parse_level3_unary()
-        left = f"({middle}, {left}, {right})"
+    elif peek() == "(":
+        middle = "*"
+        right = parse_level3_unary()
+    left = f"({middle}, {left}, {right})"
     return left
 
 
-def parse_level3_unary(): # 3 position: middle - right
+def parse_level3_unary(): 
     if peek() == "-":
         middle = take()
         right = parse_level4_power()
-        left = f"(neg {right})"
-        return left
-    else:
-        return parse_level4_power()
+        return f"(neg {right})"
+    
+    return parse_level4_power()
 
 
-def parse_level4_power(): # 3 position left - middle - right 
+def parse_level4_power(): 
     left = parse_level5_primary()
     if peek() == "^":
         middle = take()
         right = parse_level5_primary()
         left = f"({middle}, {left}, {right})"
-        return left
-    else:
-        return left
+    return left
 
 
-def parse_level5_primary(): # takes in brackets and numbers
+def parse_level5_primary():
     if peek().isdigit():
         value = take()
         return value
     if peek() == "(":
-        take() # left = "("
-        middle = parse_level1_add_sub() # second layer start with lv1 inside first layer\
+        take() 
+        middle = parse_level1_add_sub() 
         if peek() == ")":
             take ()
             return middle
