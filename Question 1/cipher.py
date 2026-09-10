@@ -61,7 +61,6 @@ def encrypt_file (shift1: int, shift2: int, input_path: str, output_path: str) -
     with open (output_path, "w") as output_file:
         output_file.write (encrypted_characters)
 
-#-------
 def decrypt_file (shift1: int, shift2: int, input_path: str, output_path: str) -> None:
     with open (input_path, "r") as input_file:
         content = input_file.read()
@@ -72,10 +71,6 @@ def decrypt_file (shift1: int, shift2: int, input_path: str, output_path: str) -
     with open (output_path, "w") as output_file:
         output_file.write(decrypted_characters)
         
-
-
-
-#-------
 def verify_files (file1_path: str, file2_path: str):
     with open (file1_path, "r") as file1:
         content1 = file1.read()
@@ -97,7 +92,6 @@ def main():
         encrypt_file (shift1_input, shift2_input, "raw_text.txt", "encrypted_text.txt")
         print ("Encryption complete")
 
-        
         decrypt_file (shift1_input, shift2_input, "encrypted_text.txt", "decrypted_text.txt")
         print ("Decryption complete")
 

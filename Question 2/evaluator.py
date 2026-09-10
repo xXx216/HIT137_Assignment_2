@@ -16,7 +16,6 @@ def parse_level1_add_sub():
         right_value, right_tree = parse_level2_mul_div()
         left_value = left_value + right_value if op == "+" else left_value - right_value
         left_tree = f"({op} {left_tree} {right_tree})"
-
     return left_value, left_tree
 
 def parse_level2_mul_div(): 
@@ -44,8 +43,7 @@ def parse_level3_unary():
         op = take()
         right_value, right_tree = parse_level4_power()
         right_value = -right_value
-        return right_value, f"(neg {right_tree})"
-    
+        return right_value, f"(neg {right_tree})"   
     return parse_level4_power()
 
 
@@ -60,7 +58,7 @@ def parse_level4_power():
 
 
 def parse_level5_primary():
-    if peek().isdigit():
+    if peek()[0].isdigit():
         v_str = take()
         v_float = float(v_str)
         return v_float, v_str
@@ -70,13 +68,11 @@ def parse_level5_primary():
         if peek() == ")":
             take ()
             return op
-    
     raise Exception 
 
 def tokenise(line):
     tokens = []
-    pos = 0
-    
+    pos = 0  
     while pos < len(line):
         c = line[pos]
         if c.isspace():
@@ -109,7 +105,6 @@ def tokenise(line):
     tokens.append("END")
     return tokens
     
-
 def evaluate_file (input_path: str):
     global numbers, position
     return_block = []
@@ -120,14 +115,13 @@ def evaluate_file (input_path: str):
     for line in lines:
         if not line.strip():
             continue
-        
-        original = line
-        
+
+        original = line     
         tokens_formartted = []
         try:
             numbers = tokenise(line)
             for i in numbers:
-                if i.isdigit():
+                if i.replace(".", "").isdigit():
                     tokens_formartted.append(f"[NUM:{i}]")
                 elif i in "+-*/%^":
                     tokens_formartted.append(f"[OP:{i}]")
@@ -140,7 +134,7 @@ def evaluate_file (input_path: str):
             
             token_str = " ".join(tokens_formartted)    
             position = 0
-            
+  
             result , tree = parse_level1_add_sub()
 
             if peek() != "END":
@@ -152,7 +146,7 @@ def evaluate_file (input_path: str):
                 "tokens": token_str,
                 "result": float(result)
             }
-            output_text = f"input: {original}\n tree: {tree}\n tokens: {token_str}\n result: {float(result)}"
+            output_text = f"Input: {original}\nTree: {tree}\nTokens: {token_str}\nResult: {float(result)}"
         except Exception:
             d = {
                 "input": original,
@@ -160,11 +154,11 @@ def evaluate_file (input_path: str):
                 "tokens": "ERROR",
                 "result": "ERROR"
             }
-            output_text = f"input: {original}\n tree: ERROR\n tokens: ERROR\n result: ERROR"
+            output_text = f"Input: {original}\nTree: ERROR\nTokens: ERROR\nResult: ERROR"
         return_block.append(d)
         output_text_block.append(output_text)
 
-    out_path = os.path.join(os.path.dirname(os.path.abspath(input_file)), "output.txt")
+    out_path = os.path.join(os.path.dirname(os.path.abspath(input_path)), "output.txt")
     with open(out_path, "w") as out:
         out.write("\n\n".join(output_text_block))
     return return_block
