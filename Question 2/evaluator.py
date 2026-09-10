@@ -113,6 +113,7 @@ def tokenise(line):
 def evaluate_file (input_path: str):
     global numbers, position
     return_block = []
+    output_text_block = []
     with open (input_path, "r") as f:
         content = f.read()
     lines = content.splitlines()
@@ -151,6 +152,7 @@ def evaluate_file (input_path: str):
                 "tokens": token_str,
                 "result": float(result)
             }
+            output_text = f"input: {original}\n tree: {tree}\n tokens: {token_str}\n result: {float(result)}"
         except Exception:
             d = {
                 "input": original,
@@ -158,14 +160,18 @@ def evaluate_file (input_path: str):
                 "tokens": "ERROR",
                 "result": "ERROR"
             }
+            output_text = f"input: {original}\n tree: ERROR\n tokens: ERROR\n result: ERROR"
         return_block.append(d)
+        output_text_block.append(output_text)
+
+    out_path = os.path.join(os.path.dirname(os.path.abspath(input_file)), "output.txt")
+    with open(out_path, "w") as out:
+        out.write("\n\n".join(output_text_block))
     return return_block
 
 
 if __name__ == "__main__":
     base_dir = os.path.dirname(os.path.abspath(__file__))
     input_file = os.path.join(base_dir, "input.txt")
-    out_path = os.path.join(os.path.dirname(os.path.abspath(input_file)), "output.txt")
     func_return = evaluate_file (input_file)
-
     print (func_return)
