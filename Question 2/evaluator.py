@@ -86,12 +86,12 @@ def tokenise(line):
             token = c
             pos += 1
             if pos < len(line) and line[pos] == ".":
-                    token += line[pos]
-                    pos += 1
+                token += line[pos]
+                pos += 1
                 if pos < len(line) and line[pos].isdigit():
                     while pos < len(line) and line[pos].isdigit():
-                    token += line[pos]
-                    pos += 1
+                        token += line[pos]
+                        pos += 1
                 else:
                     raise Exception  
             tokens.append(token)
@@ -160,4 +160,9 @@ def evaluate_file (input_path: str):
 
 
 if __name__ == "__main__":
-    evaluate_file ("input.txt")
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+    input_file = os.path.join(base_dir, "input.txt")
+    out_path = os.path.join(os.path.dirname(os.path.abspath(input_file)), "output.txt")
+    func_return = evaluate_file (input_file)
+
+    print (func_return)
