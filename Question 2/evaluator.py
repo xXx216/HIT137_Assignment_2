@@ -1,8 +1,4 @@
-
-# this is just an example: 2 + 3 * (4 + 1) (token)
-numbers = ["2", "+", "3", "*", "(", "4", "+", "1", ")", "END"] 
-
-position = 0
+import os
 
 def peek():
     return numbers[position]
@@ -24,13 +20,16 @@ def parse_level1_add_sub():
 
 def parse_level2_mul_div(): 
     left = parse_level3_unary() 
-    while peek() == "*" or peek() =="/" or peek() =="%":
-        middle = take() 
-        right = parse_level3_unary()
-    elif peek() == "(":
-        middle = "*"
-        right = parse_level3_unary()
-    left = f"({middle}, {left}, {right})"
+    while True: 
+        if peek() == "*" or peek() =="/" or peek() =="%":
+            middle = take() 
+            right = parse_level3_unary()
+        elif peek() == "(":
+            middle = "*"
+            right = parse_level3_unary()
+            left = f"({middle}, {left}, {right})"
+        else:
+            break
     return left
 
 
@@ -96,25 +95,54 @@ def tokenise(line):
 
 
 def evaluate_file (input_path: str):
+    global numbers, position
+    return_block = []
     with open (input_path, "r") as f:
         content = f.read()
     lines = content.splitlines()
     for line in lines:
         if not line.strip():
             continue
-        numbers = tokenise(line)
-        #xxxx
+        
+        original = line
+        
+        tokens_formartted = []
+        try:
+            numbers = tokenise(line)
+            for i in numbers:
+                if i.isdigit():
+                    tokens_formartted.append(f"[NUM:{i}]")
+                elif i in "+-*/%^":
+                    tokens_formartted.append(f"[OP:{i}]")
+                elif i == "(":
+                    tokens_formartted.append(f"[LPAREN:{i}]")
+                elif i == ")":
+                    tokens_formartted.append(f"[RPAREN:{i}]")
+                elif i == "END":
+                    tokens_formartted.append("[END]")
+            
+            token_str = " ".join(tokens_formartted)    
+            position = 0
+            tree = parse_level1_add_sub()
 
-
-           
-        result = parse_level1_add_sub()
-        if peek() != "END":
-            raise Exception(f"error!")
-
-
-
-
-
+            if peek() != "END":
+                raise Exception(f"error!")
+            
+            d = {
+                "input": original,
+                "tree": tree,
+                "tokens": token_str,
+                "result": 0.0
+            }
+        except Exception:
+            d = {
+                "input": original,
+                "tree": "ERROR",
+                "tokens": "ERROR",
+                "result": "ERROR"
+            }
+        return_block.append(d)
+    return return_block
 
 
 if __name__ == "__main__":
