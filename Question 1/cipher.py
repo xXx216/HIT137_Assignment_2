@@ -85,17 +85,23 @@ def verify_files (file1_path: str, file2_path: str):
 def main():
     shift1_input = int(input("Enter a non-negative integer for shift1: "))
     shift2_input = int(input("Enter a non-negative integer for shift2: "))
+    
+    base_dir = os.path.dirname (os.path.abspath(__file__))
+    raw_file = os.path.join(base_dir, "raw_text.txt")
+    encrypted_file = os.path.join(base_dir, "encrypted_text.txt")
+    decrypted_file = os.path.join(base_dir, "decrypted_text.txt")
+
     if shift1_input < 0 or shift2_input < 0:
         print ("Error: shifts must be non-negative integer!")
     
     else:
-        encrypt_file (shift1_input, shift2_input, "raw_text.txt", "encrypted_text.txt")
+        encrypt_file (shift1_input, shift2_input, raw_file, encrypted_file)
         print ("Encryption complete")
 
-        decrypt_file (shift1_input, shift2_input, "encrypted_text.txt", "decrypted_text.txt")
+        decrypt_file (shift1_input, shift2_input, encrypted_file, decrypted_file)
         print ("Decryption complete")
 
-        verify_files ("raw_text.txt", "decrypted_text.txt")
+        verify_files (raw_file, decrypted_file)
     
 if __name__ == "__main__":
     main() 
