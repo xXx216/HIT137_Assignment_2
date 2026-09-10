@@ -10,57 +10,66 @@ def take():
     return value
 
 def parse_level1_add_sub(): 
-    left = parse_level2_mul_div() 
+    left_value, left_tree = parse_level2_mul_div() 
     while peek() == "+" or peek() =="-":
-        middle = take() 
-        right = parse_level2_mul_div()
-        left = f"({middle}, {left}, {right})"
+        op = take() 
+        right_value, right_tree = parse_level2_mul_div()
+        left_value = left_value + right_value if op == "+" else left_value - right_value
+        left_tree = f"({op} {left_tree} {right_tree})"
 
-    return left
+    return left_value, left_tree
 
 def parse_level2_mul_div(): 
-    left = parse_level3_unary() 
+    left_value, left_tree = parse_level3_unary() 
     while True: 
         if peek() == "*" or peek() =="/" or peek() =="%":
-            middle = take() 
-            right = parse_level3_unary()
+            op = take() 
+            right_value, right_tree = parse_level3_unary()
+            if op == "*": left_value *= right_value
+            elif op == "/": left_value /= right_value
+            elif op == "%": left_value %= right_value
+            left_tree = f"({op} {left_tree} {right_tree})"
         elif peek() == "(":
-            middle = "*"
-            right = parse_level3_unary()
-            left = f"({middle}, {left}, {right})"
+            op = "*"
+            right_value, right_tree = parse_level3_unary()
+            left_value *= right_value
+            left_tree = f"({op} {left_tree} {right_tree})"
         else:
             break
-    return left
+    return left_value, left_tree
 
 
 def parse_level3_unary(): 
     if peek() == "-":
-        middle = take()
-        right = parse_level4_power()
-        return f"(neg {right})"
+        op = take()
+        right_value, right_tree = parse_level4_power()
+        right_value = -right_value
+        return right_value, f"(neg {right_tree})"
     
     return parse_level4_power()
 
 
 def parse_level4_power(): 
-    left = parse_level5_primary()
+    left_value, left_tree = parse_level5_primary()
     if peek() == "^":
-        middle = take()
-        right = parse_level5_primary()
-        left = f"({middle}, {left}, {right})"
-    return left
+        op = take()
+        right_value, right_tree = parse_level3_unary()
+        left_value = (left_value) ** right_value
+        left_tree = f"({op} {left_tree} {right_tree})"
+    return left_value, left_tree
 
 
 def parse_level5_primary():
     if peek().isdigit():
-        value = take()
-        return value
+        v_str = take()
+        v_float = float(v_str)
+        return v_float, v_str
     if peek() == "(":
         take() 
-        middle = parse_level1_add_sub() 
+        op = parse_level1_add_sub() 
         if peek() == ")":
             take ()
-            return middle
+            return op
     
     raise Exception (f"Error!")
 
@@ -73,12 +82,13 @@ def tokenise(line):
         if c.isspace():
             pos += 1
             continue
-        if c.isdigit():
+        if c.isdigit() or c == ".":
             token = c
             pos += 1
-            while pos < len(line) and line[pos].isdigit():
+            while pos < len(line) and line[pos].isdigit() or line[pos] == ".":
                     token += line[pos]
                     pos += 1
+                if pos < len(line) and line[pos] == "."#######
             tokens.append(token)
             continue
         if c in "+-*/%^()":
@@ -123,7 +133,8 @@ def evaluate_file (input_path: str):
             
             token_str = " ".join(tokens_formartted)    
             position = 0
-            tree = parse_level1_add_sub()
+            
+            result , tree = parse_level1_add_sub()
 
             if peek() != "END":
                 raise Exception(f"error!")
@@ -132,7 +143,7 @@ def evaluate_file (input_path: str):
                 "input": original,
                 "tree": tree,
                 "tokens": token_str,
-                "result": 0.0
+                "result": float(result)
             }
         except Exception:
             d = {
