@@ -71,7 +71,7 @@ def parse_level5_primary():
             take ()
             return op
     
-    raise Exception (f"Error!")
+    raise Exception 
 
 def tokenise(line):
     tokens = []
@@ -82,13 +82,18 @@ def tokenise(line):
         if c.isspace():
             pos += 1
             continue
-        if c.isdigit() or c == ".":
+        if c.isdigit():
             token = c
             pos += 1
-            while pos < len(line) and line[pos].isdigit() or line[pos] == ".":
+            if pos < len(line) and line[pos] == ".":
                     token += line[pos]
                     pos += 1
-                if pos < len(line) and line[pos] == "."#######
+                if pos < len(line) and line[pos].isdigit():
+                    while pos < len(line) and line[pos].isdigit():
+                    token += line[pos]
+                    pos += 1
+                else:
+                    raise Exception  
             tokens.append(token)
             continue
         if c in "+-*/%^()":
@@ -97,12 +102,10 @@ def tokenise(line):
             tokens.append(token)
             continue
         else:
-            raise Exception (f"Error!")
+            raise Exception 
     tokens.append("END")
     return tokens
     
-
-
 
 def evaluate_file (input_path: str):
     global numbers, position
