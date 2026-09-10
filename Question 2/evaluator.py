@@ -85,6 +85,9 @@ def tokenise(line):
         if c.isdigit():
             token = c
             pos += 1
+            while pos < len(line) and line[pos].isdigit():
+                token += line[pos]
+                pos += 1
             if pos < len(line) and line[pos] == ".":
                 token += line[pos]
                 pos += 1
